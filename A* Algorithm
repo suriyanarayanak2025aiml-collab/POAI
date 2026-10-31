@@ -1,0 +1,26 @@
+import heapq
+
+def a_star(grid, start, goal):
+    pq = [(0, start, [start])]
+    visited = set()
+
+    while pq:
+        cost, pos, path = heapq.heappop(pq)
+        if pos == goal:
+            return path
+        if pos in visited:
+            continue
+        visited.add(pos)
+
+        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:
+            r, c = pos[0]+dr, pos[1]+dc
+            if 0 <= r < len(grid) and 0 <= c < len(grid[0]) and grid[r][c] == 0:
+                if (r,c) not in visited:
+                    h = abs(r-goal[0]) + abs(c-goal[1])
+                    heapq.heappush(pq, (cost+1+h, (r,c), path+[(r,c)]))
+    return None
+
+grid = [[0,0,0,0,1],[1,1,0,1,0],[0,0,0,0,0],
+        [0,1,1,1,0],[0,0,0,0,0]]
+
+print("Optimal Path:", a_star(grid, (0,0), (4,4)))
