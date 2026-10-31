@@ -1,0 +1,22 @@
+# Knowledge Base (Rules in IF-THEN format)
+knowledge_base = {
+&quot;flu&quot;: [[&quot;cough&quot;, &quot;fever&quot;]],
+&quot;fever&quot;: [[&quot;sore_throat&quot;]],
+}
+# Known facts
+facts = {&quot;sore_throat&quot;, &quot;cough&quot;}
+# Backward chaining function
+def backward_chaining(goal):
+if goal in facts: # If the goal is a known fact, return True
+return True
+if goal in knowledge_base: # If the goal has rules in KB
+for conditions in knowledge_base[goal]: # Check each rule
+if all(backward_chaining(cond) for cond in conditions): # Recursively verify
+return True
+return False # If no rule or fact supports the goal, return False
+# Query: Does the patient have flu?
+query = &quot;flu&quot;
+if backward_chaining(query):
+print(f&quot;The patient is diagnosed with {query}.&quot;)
+else:
+print(f&quot;The patient does NOT have {query}.&quot;)
